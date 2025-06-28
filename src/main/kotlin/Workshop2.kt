@@ -1,5 +1,7 @@
 package org.example
 
+import javax.xml.namespace.QName
+
 // 1. กำหนด data class สำหรับเก็บข้อมูลสินค้า
 data class Product(val name: String, val price: Double, val category: String)
 
@@ -17,7 +19,7 @@ fun main() {
         Product("Smartphone", 25000.0, "Electronics"),
         Product("T-shirt", 450.0, "Apparel"),
         Product("Monitor", 7500.0, "Electronics"),
-        Product("Keyboard", 499.0,"Electronics"),
+        Product("Keyboard", 499.0, "Electronics"),
         Product("Jeans", 1200.0, "Apparel"),
         Product("Headphones", 1800.0, "Electronics")
     )
@@ -42,7 +44,7 @@ fun main() {
 
     // 4. (ขั้นสูง) วิธีที่ 2: การใช้ .asSequence() เพื่อเพิ่มประสิทธิภาพ
     val totalElecPriceOver500Sequence = products
-        .asSequence()     // แปลง List เป็น Sequence ก่อนเริ่มประมวลผล 
+        .asSequence()     // แปลง List เป็น Sequence ก่อนเริ่มประมวลผล
         .filter { it.category == "Electronics" }
         .filter { it.price > 500.0 }
         .map { it.price }
@@ -67,4 +69,23 @@ fun main() {
     println("   - เช่น: 'Laptop' จะถูก filter category -> filter price -> map price จากนั้น 'Smartphone' ถึงจะเริ่มทำกระบวนการเดียวกัน")
     println("   - จะไม่มีการสร้าง Collection กลางทาง ทำให้ประหยัดหน่วยความจำและเร็วกว่ามากสำหรับชุดข้อมูลขนาดใหญ่ เพราะทำงานกับข้อมูลทีละชิ้นและทำทุกขั้นตอนให้เสร็จในรอบเดียว")
     println("   - การคำนวณจะเกิดขึ้นเมื่อมี 'Terminal Operation' มาเรียกใช้เท่านั้น (ในที่นี้คือ .sum())")
+
+
+//2.2
+
+    val PriceRange = products.groupBy {
+        when {
+            it.price <= 1000.0 -> "ราคาไม่เกิน 1,000 บาท"
+            it.price in 1000.0..9999.9 -> "1,000-9,999"
+            else -> "ราคา 10,000 ขึ้นไป"
+        }
+    }
+
+    println("กลุ่มสินค้าตามราคา: ")
+    PriceRange.forEach { (range, products) ->
+
+        println("กลุ่มราคา $range:")
+        products.forEach { println(" - ${it.name} (${it.price} บาท)") }
+    }
+
 }
