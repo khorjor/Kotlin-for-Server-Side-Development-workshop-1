@@ -5,6 +5,28 @@ import javax.xml.namespace.QName
 // 1. กำหนด data class สำหรับเก็บข้อมูลสินค้า
 data class Product(val name: String, val price: Double, val category: String)
 
+fun countElectronicsOver500(products: List<Product>): Int {
+    return products.count { it.category == "Electronics" && it.price > 500.0 }
+}
+
+fun calculateTotalElectronicsPriceOver500(products: List<Product>): Double {
+    return products
+        .filter { it.category == "Electronics" }
+        .filter { it.price > 500.0 }
+        .sumOf { it.price }
+}
+
+
+val products = listOf(
+    Product("Laptop", 35000.0, "Electronics"),
+    Product("Smartphone", 25000.0, "Electronics"),
+    Product("T-shirt", 450.0, "Apparel"),
+    Product("Monitor", 7500.0, "Electronics"),
+    Product("Keyboard", 499.0, "Electronics"),
+    Product("Jeans", 1200.0, "Apparel"),
+    Product("Headphones", 1800.0, "Electronics")
+)
+
 fun main() {
     // 2. สร้างรายการสินค้าตัวอย่าง (List<Product>)
     // สินค้า name = "Laptop", price = 35000.0, category = "Electronics"
@@ -31,14 +53,14 @@ fun main() {
     // --- โจทย์: จงหาผลรวมราคาสินค้าทั้งหมดในหมวด 'Electronics' ที่มีราคามากกว่า 500 บาท ---
 
     // 3. วิธีที่ 1: การใช้ Chaining กับ List โดยตรง
-    val totalElecPriceOver500 = products
+    val calculateTotalElectronicsPriceOver500 = products
         .filter { it.category == "Electronics" } // กรองสินค้าหมวด Electronics
         .filter { it.price > 500.0 } // กรองสินค้าที่ราคามากกว่า 500
         .map { it.price } // ดึงเฉพาะราคาออกมาเป็น List<Double>
         .sum() // หาผลรวมของราคา
 
     println("วิธีที่ 1: ใช้ Chaining กับ List")
-    println("ผลรวมราคาสินค้า Electronics ที่ราคา > 500 บาท: $totalElecPriceOver500 บาท")
+    println("ผลรวมราคาสินค้า Electronics ที่ราคา > 500 บาท: $calculateTotalElectronicsPriceOver500 บาท")
     println("--------------------------------------------------")
 
 
@@ -87,5 +109,6 @@ fun main() {
         println("กลุ่มราคา $range:")
         products.forEach { println(" - ${it.name} (${it.price} บาท)") }
     }
+
 
 }

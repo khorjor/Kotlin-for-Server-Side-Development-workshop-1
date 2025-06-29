@@ -18,7 +18,7 @@ out/
 
 ### Kotlin ###
 .kotlin
-
+test
 ### Eclipse ###
 .apt_generated
 .classpath
